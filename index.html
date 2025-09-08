@@ -295,9 +295,150 @@
                 font-size: 1.8rem;
             }
         }
+
+        
+    /* 新增的模态窗口样式 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.7);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 2000;
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.3s ease;
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, rgba(26, 26, 46, 0.95) 0%, rgba(36, 36, 62, 0.95) 100%);
+            border-radius: 20px;
+            width: 90%;
+            max-width: 500px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            animation: modalSlideIn 0.5s ease;
+        }
+        
+        @keyframes modalSlideIn {
+            from { opacity: 0; transform: translateY(-50px) scale(0.9); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 24px;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .modal-close:hover {
+            color: var(--accent);
+        }
+        
+        .modal-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .modal-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .modal-body {
+            margin-bottom: 25px;
+        }
+        
+        .modal-features {
+            list-style: none;
+            margin: 20px 0;
+        }
+        
+        .modal-features li {
+            padding: 8px 0;
+            display: flex;
+            align-items: center;
+        }
+        
+        .modal-features li i {
+            color: var(--success);
+            margin-right: 10px;
+        }
+        
+        .modal-footer {
+            text-align: center;
+        }
+        
+        .modal-link {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(106, 17, 203, 0.3);
+        }
+        
+        .modal-link:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(106, 17, 203, 0.4);
+        }
     </style>
 </head>
 <body>
+    <!-- 新增的模态窗口 -->
+    <div class="modal-overlay" id="promoModal">
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <div class="modal-header">
+                <h2 class="modal-title">全新软件上线</h2>
+                <span class="modal-badge">天喵免费加速器</span>
+            </div>
+            <div class="modal-body">
+                <p>我们很高兴推出全新VPN服务，为您提供极致的上网体验：</p>
+                <ul class="modal-features">
+                    <li><i class="fas fa-check-circle"></i> 永久免费，高速稳定，不限流量</li>
+                    <li><i class="fas fa-check-circle"></i> 全球节点与IP代理，视频秒开</li>
+                    <li><i class="fas fa-check-circle"></i> 游戏应用加速畅快无延迟</li>
+                    <li><i class="fas fa-check-circle"></i> 零日志保护隐私，安全可靠</li>
+                    <li><i class="fas fa-check-circle"></i> 边用边赚TOKEN奖励机制</li>
+                </ul>
+                <p>享受更快、更稳、更安全的上网体验！</p>
+            </div>
+            <div class="modal-footer">
+                <a href="https://tianmiaovpn.com" class="modal-link">立即体验</a>
+            </div>
+        </div>
+    </div>
+
+    
     <!-- 动态粒子背景 -->
     <div id="particles-js"></div>
     
@@ -433,7 +574,43 @@
     
     <!-- 引入粒子效果库 -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
-    
+
+    <script>
+        // 页面加载完成后显示模态窗口
+        document.addEventListener('DOMContentLoaded', function() {
+            // 显示模态窗口
+            document.getElementById('promoModal').style.display = 'flex';
+            
+            // 关闭模态窗口的功能
+            document.getElementById('modalClose').addEventListener('click', function() {
+                document.getElementById('promoModal').style.display = 'none';
+            });
+            
+            // 点击模态窗口外部也可以关闭
+            document.getElementById('promoModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+        });
+
+        // 返回顶部按钮功能
+        const backToTopButton = document.getElementById('backToTop');
+        
+        window.addEventListener('scroll', () => {
+            if (window.pageYOffset > 300) {
+                backToTopButton.classList.add('visible');
+            } else {
+                backToTopButton.classList.remove('visible');
+            }
+        });
+        
+        backToTopButton.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    </script>
+        
     <script>
         // 初始化粒子背景
         particlesJS("particles-js", {
